@@ -1,10 +1,13 @@
 "use client";
 
 import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 const sectionIds = ["about", "education", "experience", "skills", "contact"];
 
 export default function MotionController() {
+  const pathname = usePathname();
+
   useEffect(() => {
     const root = document.documentElement;
     root.classList.add("motion-ready");
@@ -137,7 +140,7 @@ export default function MotionController() {
       window.removeEventListener("scroll", updateTimeline);
       window.removeEventListener("scroll", updateProgress);
     };
-  }, []);
+  }, [pathname]);
 
   return <div className="scroll-progress" aria-hidden="true"><span data-scroll-progress /></div>;
 }

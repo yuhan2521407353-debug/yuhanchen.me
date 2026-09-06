@@ -1,94 +1,37 @@
 "use client";
 
-import { FormEvent, useEffect, useRef, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { profile } from "../data/profile";
+import { openModule } from "./module-link";
 
-type Command = { label: string; hint: string; target?: string; href?: string };
-
+type Command = { label: string; hint: string; path?: string; href?: string; ask?: boolean; terminal?: boolean; copy?: boolean };
 const commands: Command[] = [
-  { label: "Go to About", hint: "1", target: "about" },
-  { label: "Go to Education", hint: "2", target: "education" },
-  { label: "Go to Experience", hint: "3", target: "experience" },
-  { label: "Go to Skills", hint: "4", target: "skills" },
-  { label: "Open GitHub", hint: "↗", href: profile.github },
-  { label: "Open LinkedIn", hint: "↗", href: profile.linkedin },
-  { label: "Contact Me", hint: "G C", target: "contact" },
+  { label: "Go to Control", hint: "0", path: "/" }, { label: "Open Profile", hint: "1", path: "/profile" }, { label: "Open Journey", hint: "2", path: "/journey" }, { label: "Open System", hint: "3", path: "/system" }, { label: "Open Connect", hint: "4", path: "/connect" },
+  { label: "Ask YUHAN.OS", hint: "/", ask: true }, { label: "Open Terminal", hint: "T", terminal: true }, { label: "Copy Email", hint: "⌘C", copy: true }, { label: "Open GitHub", hint: "↗", href: profile.github }, { label: "Open LinkedIn", hint: "↗", href: profile.linkedin },
 ];
-
-const portfolioAnswers = [
-  { matches: ["where", "study"], answer: "Yuhan studies Computer Science at Stony Brook University.", target: "education" },
-  { matches: ["programming", "language"], answer: "Yuhan works with Java, C, JavaScript, and Python.", target: "skills" },
-  { matches: ["experience"], answer: "Yuhan has experience in medical office operations, professional readiness programming, and FTC robotics.", target: "experience" },
-  { matches: ["graduate", "graduation"], answer: "Expected graduation is May 2028.", target: "education" },
-  { matches: ["skill", "show"], answer: "Skills include programming languages, developer tools, data structures & algorithms, and robotics programming.", target: "skills" },
+const answers = [
+  { test: /where.*study|study|stony brook/, answer: "Yuhan studies Computer Science at Stony Brook University.", path: "/profile" }, { test: /what.*studying|studying|program/, answer: "Yuhan is pursuing a B.S. in Computer Science.", path: "/profile" }, { test: /graduate|graduation/, answer: "Yuhan’s expected graduation is May 2028.", path: "/profile" }, { test: /language|java|python|javascript|\bc\b/, answer: "Yuhan works with Java, C, Python, and JavaScript.", path: "/system" }, { test: /tool|git|code|intellij/, answer: "Yuhan uses Git, VS Code, and IntelliJ IDEA.", path: "/system" }, { test: /robotics|ftc/, answer: "Yuhan designed and implemented JavaScript robot control programs for FIRST Tech Challenge competitions.", path: "/journey" }, { test: /experience|work|medical|nyccp/, answer: "Yuhan’s portfolio includes medical office work, the NYCCP Operation: ADULTing™ program, and FTC robotics.", path: "/journey" }, { test: /contact|email|linkedin|github/, answer: "You can reach Yuhan by email, GitHub, or LinkedIn through the Connect module.", path: "/connect" },
 ];
-
-const terminalResponses: Record<string, string[]> = {
-  whoami: ["Yuhan Chen", "Computer Science @ Stony Brook University"],
-  about: ["Computer Science student focused on software development, algorithms, and practical systems."],
-  education: ["B.S. in Computer Science", "Stony Brook University · Expected May 2028"],
-  skills: ["Java · C · JavaScript · Python", "Git · VS Code · IntelliJ IDEA", "Data Structures & Algorithms · Robotics Programming"],
-  experience: ["Medical Office Staff · Wang’s Medical PC", "Program Intern · NYCCP — Operation: ADULTing™", "FTC Robotics · Tottenville High School Robotics Team"],
-  resume: ["Resume module is not currently available."],
-  contact: ["Email, GitHub, and LinkedIn are available in the Contact section."],
-  help: ["Commands: whoami, about, education, experience, skills, resume, contact, clear, help"],
+const terminal: Record<string, { lines: string[]; path?: string }> = {
+  help: { lines: ["Commands: help, whoami, about, profile, journey, education, experience, skills, system, contact, github, linkedin, clear, home"] }, whoami: { lines: ["Yuhan Chen", "Computer Science @ Stony Brook University", "Status: Active"] }, about: { lines: ["Computer Science student interested in software development, technology, and practical systems."], path: "/profile" }, profile: { lines: ["Identity record: Yuhan Chen · B.S. in Computer Science", "Expected graduation: May 2028"], path: "/profile" }, journey: { lines: ["Timeline module: FTC Robotics · Stony Brook University · NYCCP · Wang’s Medical PC"], path: "/journey" }, education: { lines: ["Stony Brook University · B.S. in Computer Science · Expected May 2028"], path: "/journey" }, experience: { lines: ["Medical Office Staff · Wang’s Medical PC", "Program Intern · NYCCP — Operation: ADULTing™", "FTC Robotics · Tottenville High School Robotics Team"], path: "/journey" }, skills: { lines: ["Java · C · Python · JavaScript", "Git · VS Code · IntelliJ IDEA", "Object-Oriented Programming · Data Structures & Algorithms · Robotics Programming"], path: "/system" }, system: { lines: ["Technical system module ready."], path: "/system" }, contact: { lines: ["Email, GitHub, and LinkedIn are available in the Connect module."], path: "/connect" }, github: { lines: [profile.github] }, linkedin: { lines: [profile.linkedin] }, home: { lines: ["Returning to Control Center."], path: "/" },
 };
 
-const terminalNavigation: Record<string, string> = { about: "about", education: "education", experience: "experience", skills: "skills", contact: "contact" };
-
-function scrollToSection(id: string) { document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" }); }
-
 export default function PortfolioControls() {
-  const [commandOpen, setCommandOpen] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [query, setQuery] = useState("");
-  const [terminalOpen, setTerminalOpen] = useState(false);
-  const [terminalInput, setTerminalInput] = useState("");
-  const [terminalLines, setTerminalLines] = useState<string[]>(["[ready] profile loaded", "[ready] education module", "[ready] experience module", "[ready] skills module", "Type help to explore."]);
-  const commandInput = useRef<HTMLInputElement>(null);
-  const terminalInputRef = useRef<HTMLInputElement>(null);
-
-  const normalizedQuery = query.toLowerCase();
-  const answer = normalizedQuery ? portfolioAnswers.find((item) => item.matches.some((match) => normalizedQuery.includes(match))) ?? null : null;
-  const runCommand = (command: Command) => {
-    if (command.target) scrollToSection(command.target);
-    if (command.href) window.open(command.href, "_blank", "noopener,noreferrer");
-    setCommandOpen(false);
-  };
-  const openPalette = () => { setSelectedIndex(0); setQuery(""); setCommandOpen(true); };
-
-  useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      const target = event.target as HTMLElement | null;
-      const isTyping = target?.tagName === "INPUT" || target?.tagName === "TEXTAREA";
-      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") { event.preventDefault(); if (commandOpen) setCommandOpen(false); else openPalette(); return; }
-      if (event.key === "Escape") { setCommandOpen(false); setTerminalOpen(false); return; }
-      if (isTyping) return;
-      if (event.key === "/") { event.preventDefault(); openPalette(); return; }
-      if (event.key.toLowerCase() === "t") { event.preventDefault(); setTerminalOpen((open) => !open); return; }
-      const shortcut = { "1": "about", "2": "education", "3": "experience", "4": "skills" }[event.key];
-      if (shortcut) { event.preventDefault(); scrollToSection(shortcut); return; }
-      if (!commandOpen) return;
-      if (event.key === "ArrowDown" || event.key === "ArrowUp") { event.preventDefault(); setSelectedIndex((index) => (index + (event.key === "ArrowDown" ? 1 : -1) + commands.length) % commands.length); }
-      if (event.key === "Enter") { event.preventDefault(); runCommand(commands[selectedIndex]); }
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [commandOpen, selectedIndex]);
-  useEffect(() => { if (commandOpen) window.setTimeout(() => commandInput.current?.focus(), 0); }, [commandOpen]);
-  useEffect(() => { if (terminalOpen) window.setTimeout(() => terminalInputRef.current?.focus(), 0); }, [terminalOpen]);
-
-  const runTerminalCommand = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); const command = terminalInput.trim().toLowerCase(); if (!command) return;
-    if (command === "clear") setTerminalLines([]);
-    else { if (terminalNavigation[command]) scrollToSection(terminalNavigation[command]); const response = terminalResponses[command] ?? [`Command not found: ${command}`, "Type help to see available commands."]; setTerminalLines((lines) => [...lines, `> ${command}`, ...response]); }
-    setTerminalInput("");
-  };
-
-  return <>
-    <button type="button" className="command-trigger" onClick={openPalette} aria-haspopup="dialog" aria-label="Open command palette"><span className="hidden sm:inline">⌘</span><span className="sm:hidden">Ctrl</span> K</button>
-    {commandOpen && <div className="command-overlay" role="presentation" onMouseDown={() => setCommandOpen(false)}><section className="command-palette" role="dialog" aria-modal="true" aria-label="Ask Yuhan's portfolio" onMouseDown={(event) => event.stopPropagation()}><div className="command-search"><span>⌕</span><input ref={commandInput} value={query} onChange={(event) => setQuery(event.target.value)} aria-label="Ask Yuhan's portfolio" placeholder="Ask my portfolio or search commands" /></div>{answer && <button type="button" className="portfolio-answer" onClick={() => { scrollToSection(answer.target); setCommandOpen(false); }}><span>PORTFOLIO RESPONSE</span><strong>{answer.answer}</strong><em>View source ↗</em></button>}<div className="command-list" role="listbox" aria-label="Commands">{commands.map((command, index) => <button key={command.label} type="button" role="option" aria-selected={selectedIndex === index} className="command-item" data-selected={selectedIndex === index || undefined} onMouseEnter={() => setSelectedIndex(index)} onClick={() => runCommand(command)}><span>{command.label}</span><kbd>{command.hint}</kbd></button>)}</div><p className="command-footer"><span>↑↓ to navigate</span><span>/ to ask</span><span>esc to close</span></p></section></div>}
-    <button type="button" className="terminal-trigger" onClick={() => setTerminalOpen((open) => !open)} aria-expanded={terminalOpen} aria-controls="portfolio-terminal" aria-label="Open portfolio terminal">&gt;_</button>
-    {terminalOpen && <section id="portfolio-terminal" className="terminal-panel" aria-label="Portfolio console"><div className="terminal-titlebar"><span><i /> <i /> <i /></span><small>YUHAN.OS / CONSOLE</small><button type="button" onClick={() => setTerminalOpen(false)} aria-label="Close terminal">×</button></div><div className="terminal-body" aria-live="polite">{terminalLines.map((line, index) => <p key={`${line}-${index}`}>{line}</p>)}</div><form onSubmit={runTerminalCommand} className="terminal-form"><span>&gt;</span><input ref={terminalInputRef} value={terminalInput} onChange={(event) => setTerminalInput(event.target.value)} aria-label="Terminal command" autoComplete="off" spellCheck="false" /></form></section>}
-  </>;
+  const router = useRouter(); const [palette, setPalette] = useState(false); const [terminalOpen, setTerminalOpen] = useState(false); const [query, setQuery] = useState(""); const [selected, setSelected] = useState(0); const [message, setMessage] = useState(""); const [lines, setLines] = useState(["[ready] YUHAN.OS console", "Type help to explore."]); const [input, setInput] = useState(""); const inputRef = useRef<HTMLInputElement>(null); const paletteRef = useRef<HTMLElement>(null); const terminalRef = useRef<HTMLInputElement>(null);
+  const filtered = useMemo(() => commands.filter((command) => !query || command.label.toLowerCase().includes(query.toLowerCase()) || command.ask), [query]);
+  const answer = query ? answers.find((item) => item.test.test(query.toLowerCase())) : undefined;
+  const navigate = (path: string) => { const id = path === "/" ? "CONTROL_00" : `${path.slice(1).toUpperCase()}_${({ "/profile": "01", "/journey": "02", "/system": "03", "/connect": "04" } as Record<string, string>)[path]}`; openModule(id); router.push(path); };
+  const openPalette = () => { setQuery(""); setSelected(0); setMessage(""); setPalette(true); };
+  const closePalette = () => setPalette(false);
+  const copyEmail = async () => { try { await navigator.clipboard.writeText(profile.email); setMessage("Email copied to clipboard."); } catch { setMessage(`Email: ${profile.email}`); } };
+  const run = async (command: Command) => { if (command.path) navigate(command.path); if (command.href) window.open(command.href, "_blank", "noopener,noreferrer"); if (command.copy) await copyEmail(); if (command.terminal) setTerminalOpen(true); if (!command.ask && !command.copy) closePalette(); if (command.ask) inputRef.current?.focus(); };
+  useEffect(() => { const paletteEvent = () => openPalette(); const terminalEvent = () => setTerminalOpen(true); window.addEventListener("yuhan:open-palette", paletteEvent); window.addEventListener("yuhan:open-terminal", terminalEvent); return () => { window.removeEventListener("yuhan:open-palette", paletteEvent); window.removeEventListener("yuhan:open-terminal", terminalEvent); }; });
+  useEffect(() => { if (!palette) return; const previousOverflow = document.body.style.overflow; document.body.style.overflow = "hidden"; const focusTimer = window.setTimeout(() => inputRef.current?.focus(), 0); return () => { document.body.style.overflow = previousOverflow; window.clearTimeout(focusTimer); }; }, [palette]);
+  useEffect(() => { const onKey = (event: KeyboardEvent) => { const target = event.target as HTMLElement | null; const typing = ["INPUT", "TEXTAREA"].includes(target?.tagName ?? ""); if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") { event.preventDefault(); if (palette) closePalette(); else openPalette(); return; } if (event.key === "Escape") { closePalette(); setTerminalOpen(false); return; } if (palette && event.key === "Tab") { const focusable = [...(paletteRef.current?.querySelectorAll<HTMLElement>("button, input") ?? [])].filter((element) => !element.hasAttribute("disabled")); const current = focusable.indexOf(document.activeElement as HTMLElement); if (!focusable.length) return; if (event.shiftKey && current <= 0) { event.preventDefault(); focusable.at(-1)?.focus(); } else if (!event.shiftKey && current === focusable.length - 1) { event.preventDefault(); focusable[0]?.focus(); } return; } if (typing) return; if (event.key === "/") { event.preventDefault(); openPalette(); return; } if (event.key.toLowerCase() === "t") { event.preventDefault(); setTerminalOpen((value) => !value); return; } const route = { "0": "/", "1": "/profile", "2": "/journey", "3": "/system", "4": "/connect" }[event.key]; if (route) { event.preventDefault(); navigate(route); return; } if (!palette) return; if (event.key === "ArrowDown" || event.key === "ArrowUp") { event.preventDefault(); setSelected((index) => (index + (event.key === "ArrowDown" ? 1 : -1) + filtered.length) % filtered.length); } if (event.key === "Enter" && filtered[selected]) { event.preventDefault(); void run(filtered[selected]); } }; window.addEventListener("keydown", onKey); return () => window.removeEventListener("keydown", onKey); // Listener intentionally follows palette state and command filtering.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [palette, selected, filtered]);
+  useEffect(() => { if (terminalOpen) window.setTimeout(() => terminalRef.current?.focus(), 0); }, [terminalOpen]);
+  const submit = (event: FormEvent) => { event.preventDefault(); const command = input.trim().toLowerCase(); if (!command) return; if (command === "clear") setLines([]); else { const result = terminal[command] ?? { lines: [`Command not found: ${command}`, "Type help to see available commands."] }; setLines((previous) => [...previous, `> ${command}`, ...result.lines]); if (result.path) navigate(result.path); if (command === "github") window.open(profile.github, "_blank", "noopener,noreferrer"); if (command === "linkedin") window.open(profile.linkedin, "_blank", "noopener,noreferrer"); } setInput(""); };
+  return <><button type="button" className="command-trigger" onClick={openPalette} aria-haspopup="dialog" aria-label="Open command palette">⌘ K</button>{palette && <div className="command-overlay" onMouseDown={closePalette}><section ref={paletteRef} className="command-palette" role="dialog" aria-modal="true" aria-label="Ask Yuhan OS" onMouseDown={(event) => event.stopPropagation()}><div className="command-search"><span>⌕</span><input ref={inputRef} value={query} onChange={(event) => { setQuery(event.target.value); setSelected(0); }} placeholder="Ask Yuhan.OS or search commands" aria-label="Ask Yuhan OS" /></div>{answer && <button type="button" className="portfolio-answer" onClick={() => { navigate(answer.path); closePalette(); }}><span>PORTFOLIO RESPONSE</span><strong>{answer.answer}</strong><em>Open source module ↗</em></button>}{message && <p className="command-message" role="status">{message}</p>}<div className="command-list" role="listbox" aria-label="Commands">{filtered.map((command, index) => <button key={command.label} type="button" className="command-item" data-selected={index === selected || undefined} onMouseEnter={() => setSelected(index)} onClick={() => void run(command)}><span>{command.label}</span><kbd>{command.hint}</kbd></button>)}</div><p className="command-footer">↑↓ Navigate <span>Enter Open</span><span>Esc Close</span></p></section></div>}<button type="button" className="terminal-trigger" onClick={() => setTerminalOpen(!terminalOpen)} aria-expanded={terminalOpen} aria-label="Open terminal">&gt;_</button>{terminalOpen && <section className="terminal-panel" aria-label="Yuhan OS terminal"><div className="terminal-titlebar"><span>YUHAN.OS / CONSOLE</span><button onClick={() => setTerminalOpen(false)} type="button" aria-label="Close terminal">×</button></div><div className="terminal-body" aria-live="polite">{lines.map((line, index) => <p key={`${line}-${index}`}>{line}</p>)}</div><form className="terminal-form" onSubmit={submit}><span>&gt;</span><input ref={terminalRef} value={input} onChange={(event) => setInput(event.target.value)} aria-label="Terminal command" autoComplete="off" /></form></section>}</>;
 }
