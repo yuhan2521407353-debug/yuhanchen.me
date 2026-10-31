@@ -18,7 +18,7 @@ test("only the exact frontdesk host proxies to the authenticated origin, without
   assert.match(source, /beforeFiles/);
   assert.match(source, /type: "host"/);
   assert.match(source, /frontdesk/);
-  assert.match(source, /https:\/\/craft-casual-reflections-nevada\.trycloudflare\.com\/:path\*/);
+  assert.match(source, /https:\/\/simulation-experimental-accomplished-reg\.trycloudflare\.com\/:path\*/);
   assert.match(source, /CDN-Cache-Control/);
   assert.match(source, /private, no-store/);
   assert.doesNotMatch(source, /DATABASE_URL|SESSION_SECRET|password|Authorization|Bearer/);
