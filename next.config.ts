@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
       beforeFiles: [{
         source: "/:path*",
         has: [{ type: "host", value: "frontdesk\\.yuhanchen\\.me" }],
-        destination: "https://jurisdiction-judy-hearings-bailey.trycloudflare.com/:path*",
+        destination: "https://submit-cards-mariah-occurred.trycloudflare.com/:path*",
       }],
       afterFiles: [],
       fallback: [],
