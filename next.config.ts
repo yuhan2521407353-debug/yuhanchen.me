@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
 
         has: [{ type: "host", value: "frontdesk\\.yuhanchen\\.me" }],
 
-        destination: "https://powered-telecharger-gsm-cleveland.trycloudflare.com/:path*",
+        destination: "https://nuclear-glucose-better-census.trycloudflare.com/:path*",
 
       }],
 

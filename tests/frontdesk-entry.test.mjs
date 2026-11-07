@@ -38,7 +38,7 @@ test("only the exact frontdesk host proxies to the authenticated origin, without
 
   assert.match(source, /frontdesk/);
 
-  assert.match(source, /https:\/\/powered-telecharger-gsm-cleveland\.trycloudflare\.com\/:path\*/);
+  assert.match(source, /https:\/\/nuclear-glucose-better-census\.trycloudflare\.com\/:path\*/);
 
   assert.match(source, /CDN-Cache-Control/);
 
