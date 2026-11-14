@@ -34,7 +34,7 @@ const nextConfig: NextConfig = {
 
 
 
-        destination: "https://deluxe-bool-income-comparisons.trycloudflare.com/:path*",
+        destination: "https://platform-neil-towards-gzip.trycloudflare.com/:path*",
 
 
 
