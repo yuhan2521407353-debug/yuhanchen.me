@@ -34,7 +34,7 @@ const nextConfig: NextConfig = {
 
 
 
-        destination: "https://platform-neil-towards-gzip.trycloudflare.com/:path*",
+        destination: "https://bin-arrow-harbour-return.trycloudflare.com/:path*",
 
 
 
