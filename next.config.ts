@@ -34,7 +34,7 @@ const nextConfig: NextConfig = {
 
 
 
-        destination: "https://bin-arrow-harbour-return.trycloudflare.com/:path*",
+        destination: "https://tobacco-skins-exploring-gasoline.trycloudflare.com/:path*",
 
 
 
