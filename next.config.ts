@@ -34,7 +34,7 @@ const nextConfig: NextConfig = {
 
 
 
-        destination: "https://innovation-sandra-cas-baker.trycloudflare.com/:path*",
+        destination: "https://mic-passion-shaved-four.trycloudflare.com/:path*",
 
 
 
