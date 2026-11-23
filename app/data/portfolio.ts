@@ -1,12 +1,12 @@
 
 export const projects = [
   {
-    title: "AI Clinic Front Desk",
+    title: "Voice Scheduling Automation",
     dates: "Jul 2026 – Present",
-    description: "A bilingual phone agent for clinic appointments and live staff handoffs.",
+    description: "A phone-based workflow for scheduling appointments in English and Mandarin.",
     details: [
-      "Streamed English and Mandarin calls with Twilio Media Streams and OpenAI Realtime. Supported booking, lookup, rescheduling, and cancellation.",
-      "Verified patient identity and appointment availability before saving. Checked the saved record before confirming the booking.",
+      "Streamed calls with Twilio Media Streams and OpenAI Realtime to support booking, lookup, rescheduling, and cancellations.",
+      "Used Playwright to verify identity and availability, then checked the saved record before confirming each booking.",
       "Handled caller interruptions and synced call and booking activity to a PostgreSQL staff dashboard through a retryable queue.",
       "Used synthetic call replays to diagnose repeated prompts and early replies. One release passed 3,996 regression checks.",
     ],
