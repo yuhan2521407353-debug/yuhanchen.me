@@ -6,7 +6,7 @@ import styles from "./portfolio.module.css";
 
 const geist = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
 const title = "Yuhan Chen | Software Engineering and Applied AI";
-const description = "Yuhan Chen is a computer science student at Stony Brook University building real-time voice applications and tools that automate manual workflows.";
+const description = "Yuhan Chen is a computer science student at Stony Brook University with experience in medical office operations and a focus on workflow automation.";
 const siteUrl = "https://yuhanchen.me";
 
 export const metadata: Metadata = {
@@ -26,7 +26,7 @@ const person = {
   description,
   jobTitle: "Computer Science Student",
   affiliation: { "@type": "CollegeOrUniversity", name: profile.university },
-  knowsAbout: ["Software Engineering", "Applied AI", "Real-time Voice Applications"],
+  knowsAbout: ["Software Engineering", "Applied AI", "Workflow Automation"],
   sameAs: [profile.github, profile.linkedin],
 };
 

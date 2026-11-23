@@ -30,7 +30,7 @@ export default function Home() {
             <p className={styles.focus}>Software Engineering &amp; Applied AI</p>
             <h1 id="name">{profile.name}</h1>
             <p className={styles.summary}>
-              I’m a computer science student building real-time voice applications and tools that automate manual workflows.
+              I’m a computer science student with hands-on experience in medical office operations. I build software to simplify routine work.
             </p>
             <div className={styles.actions}>
               <a className={styles.button} href="#projects">View projects <span aria-hidden="true">↓</span></a>

@@ -1,16 +1,15 @@
 
 export const projects = [
   {
-    title: "Voice Scheduling Automation",
+    title: "Workflow Automation",
     dates: "Jul 2026 – Present",
-    description: "A phone-based workflow for scheduling appointments in English and Mandarin.",
+    description: "A program designed to simplify routine office work and reduce manual steps.",
     details: [
-      "Streamed calls with Twilio Media Streams and OpenAI Realtime to support booking, lookup, rescheduling, and cancellations.",
-      "Used Playwright to verify identity and availability, then checked the saved record before confirming each booking.",
-      "Handled caller interruptions and synced call and booking activity to a PostgreSQL staff dashboard through a retryable queue.",
-      "Used synthetic call replays to diagnose repeated prompts and early replies. One release passed 3,996 regression checks.",
+      "Identified recurring tasks that could be simplified or automated.",
+      "Used AI to support structured workflows, with staff review for exceptions.",
+      "Tested common and unusual scenarios to check reliability and consistency.",
     ],
-    stack: ["Python", "FastAPI", "Twilio", "OpenAI Realtime", "PostgreSQL", "Playwright"],
+    stack: ["Python", "FastAPI", "PostgreSQL"],
   },
   {
     title: "Personal Portfolio",
@@ -31,7 +30,7 @@ export const experience = [
     organization: "Wang’s Medical PC",
     location: "Brooklyn, NY",
     dates: "2025 – Present",
-    description: "Handle patient intake, appointment scheduling, and records. Coordinate scheduling requests and appointment updates with patients and clinic staff.",
+    description: "Support daily medical office operations across patient services, scheduling, records, and staff coordination. Use that experience to identify where software can simplify routine work.",
   },
   {
     role: "Program Intern",
