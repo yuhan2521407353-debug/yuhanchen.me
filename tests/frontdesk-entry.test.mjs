@@ -42,11 +42,11 @@ test("home offers a real HTTPS staff-login link, without embedding clinic data o
 
 
 
-  assert.match(source, /Yuhan<br/);
+  assert.match(source, /<h1 id="name">\{profile\.name\}<\/h1>/);
 
 
 
-  assert.match(source, /<KnowledgeGraph/);
+  assert.match(source, /Selected Projects/);
 
 
 

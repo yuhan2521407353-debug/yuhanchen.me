@@ -1,57 +1,41 @@
+
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import SystemShell from "./components/system-shell";
+import { Geist } from "next/font/google";
 import { profile } from "./data/profile";
-import "./globals.css";
+import styles from "./portfolio.module.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const geist = Geist({ subsets: ["latin"], variable: "--font-geist-sans" });
+const title = "Yuhan Chen | Software Engineering and Applied AI";
+const description = "Yuhan Chen is a computer science student at Stony Brook University building real-time voice applications and software for clinic workflows.";
+const siteUrl = "https://yuhanchen.me";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://yuhanchen.me"),
-  title: "Yuhan Chen | Computer Science @ Stony Brook University",
-  description: "Yuhan Chen is a Computer Science student at Stony Brook University interested in AI systems, software engineering, algorithms, and practical technology.",
-  alternates: {
-    canonical: "/",
-  },
-  robots: {
-    index: true,
-    follow: true,
-  },
-  openGraph: {
-    type: "website",
-    url: "/",
-    title: "Yuhan Chen | Computer Science @ Stony Brook University",
-    description: "Yuhan Chen is a Computer Science student at Stony Brook University interested in AI systems, software engineering, algorithms, and practical technology.",
-    siteName: "Yuhan Chen",
-  },
+  metadataBase: new URL(siteUrl),
+  title,
+  description,
+  alternates: { canonical: "/" },
+  openGraph: { type: "website", url: "/", title, description, siteName: profile.name },
   icons: { icon: "/favicon.ico" },
 };
 
-const personJsonLd = {
-  "@context": "https://schema.org", "@type": "Person", name: profile.name, url: "https://yuhanchen.me",
-  description: "Computer Science student at Stony Brook University interested in AI systems, software engineering, algorithms, and practical technology.",
-  jobTitle: "Computer Science Student", affiliation: { "@type": "CollegeOrUniversity", name: profile.university },
-  knowsAbout: ["AI Systems", "Software Engineering", "Data Structures & Algorithms", "Object-Oriented Programming", "FTC Robotics Programming"], sameAs: [profile.github, profile.linkedin],
+const person = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: profile.name,
+  url: siteUrl,
+  description,
+  jobTitle: "Computer Science Student",
+  affiliation: { "@type": "CollegeOrUniversity", name: profile.university },
+  knowsAbout: ["Software Engineering", "Applied AI", "Real-time Voice Applications"],
+  sameAs: [profile.github, profile.linkedin],
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="en"
-      data-scroll-behavior="smooth"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body suppressHydrationWarning className="min-h-full flex flex-col">
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd).replace(/</g, "\\u003c") }} />
-        <SystemShell>{children}</SystemShell>
+    <html lang="en" className={geist.variable}>
+      <body className={styles.body}>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(person).replace(/</g, "\\u003c") }} />
+        {children}
       </body>
     </html>
   );

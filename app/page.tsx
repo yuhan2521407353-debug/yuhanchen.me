@@ -1,19 +1,128 @@
-import KnowledgeGraph from "./components/knowledge-graph";
-import ModuleLink from "./components/module-link";
-import NeuralSystem from "./components/neural-system";
-import { currentThemes, interests, modules, profile, skills, verifiedCapabilitySnapshot } from "./data/profile";
+
+import { experience, projects, technicalSkills } from "./data/portfolio";
+import { profile } from "./data/profile";
+import styles from "./portfolio.module.css";
+
+const sections = [
+  ["Projects", "#projects"],
+  ["Experience", "#experience"],
+  ["Skills", "#skills"],
+  ["Contact", "#contact"],
+] as const;
 
 export default function Home() {
-  return <>
-    <section className="control-hero">
-      <div className="hero-copy"><p className="eyebrow hero-available"><i /> MODULE 00 / CONTROL</p><h1>Yuhan<br /><span>Chen.</span></h1><p className="hero-program">Computer Science @ Stony Brook University</p><p className="hero-description">Building practical software systems with interests in AI systems, software engineering, algorithms, and technology.</p><p className="hero-graduation">Expected graduation · May 2028</p><div className="hero-actions"><ModuleLink href="/system" label="SYSTEM_03" className="primary-button">Inspect technical system <b>↗</b></ModuleLink><ModuleLink href="/journey" label="JOURNEY_02" className="quiet-button">Explore journey ↗</ModuleLink></div></div>
-      <div className="hero-system"><div className="hero-graph"><NeuralSystem /></div><aside className="status-card"><div><span>SYSTEM STATUS</span><strong><i /> ONLINE</strong></div><dl><div><dt>IDENTITY</dt><dd>Yuhan Chen</dd></div><div><dt>ACADEMIC SYSTEM</dt><dd>Stony Brook University</dd></div><div><dt>PROGRAM</dt><dd>Computer Science</dd></div><div><dt>EXPECTED</dt><dd>May 2028</dd></div><div><dt>LANGUAGES</dt><dd>{skills.Languages.join(" / ")}</dd></div></dl><footer>INTERFACE READY <b>·</b> KNOWLEDGE GRAPH ACTIVE</footer></aside></div>
-    </section>
-    <section className="control-focus" aria-labelledby="frontdesk-access-title"><div><p className="eyebrow">STAFF ACCESS</p><h2 id="frontdesk-access-title">AI Front Desk</h2><p>Secure clinic platform. Authorized staff sign-in required.</p></div><a className="primary-button" href="https://frontdesk.yuhanchen.me/staff/login" rel="noreferrer">Staff login / 前台平台登录 <b aria-hidden="true">↗</b></a></section>
-    <section data-reveal className="control-focus"><div><p className="eyebrow">ENGINEERING FOCUS</p><h2>Building foundations for thoughtful software.</h2></div><div className="focus-tags">{interests.map((interest) => <span key={interest}>{interest}</span>)}</div></section>
-    <section data-reveal className="control-stack"><div><p className="eyebrow">TECHNICAL SNAPSHOT</p><h2>Languages, systems, and current themes.</h2><p>A concise view of coursework, applied robotics work, and verified engineering capabilities.</p></div><div><span className="stack-label">CORE LANGUAGES</span><div className="stack-tags">{skills.Languages.map((skill) => <span key={skill}>{skill}</span>)}</div><span className="stack-label">VERIFIED SYSTEMS</span><div className="stack-tags">{verifiedCapabilitySnapshot.map((capability) => <span key={capability}>{capability}</span>)}</div><span className="stack-label">CURRENT THEMES</span><div className="stack-tags">{currentThemes.map((theme) => <span key={theme}>{theme}</span>)}</div></div></section>
-    <section data-reveal className="control-modules"><div className="section-intro"><div><p className="eyebrow">PORTFOLIO MODULES</p><h2>Explore the record.</h2></div><p>Academic foundations, hands-on robotics work, professional experience, and current technical interests—organized for a quick, clear read.</p></div><div className="module-grid">{modules.slice(1).map((module) => <ModuleLink key={module.path} href={module.path} label={`${module.name}_${module.id}`} className="module-card"><div><span>MODULE {module.id}</span><strong>{module.name}</strong></div><p>{module.title}</p><footer><i /> STATUS READY <b>{module.description} ↗</b></footer></ModuleLink>)}</div></section>
-    <KnowledgeGraph />
-    <section data-reveal className="control-brief"><p className="eyebrow">EDUCATION</p><h2>{profile.university}<br /><span>{profile.program}</span></h2><p>{profile.educationDates} · Expected graduation {profile.graduation}. Relevant coursework includes data structures, object-oriented programming, programming abstractions, linear algebra, and probability &amp; statistics.</p></section>
-  </>;
+  return (
+    <>
+      <a className={styles.skipLink} href="#main">Skip to content</a>
+      <header id="top" className={styles.header}>
+        <div className={`${styles.container} ${styles.headerInner}`}>
+          <a className={styles.brand} href="#top" aria-label="Yuhan Chen, back to top">{profile.name}</a>
+          <nav className={styles.nav} aria-label="Main navigation">
+            {sections.map(([label, href]) => <a key={href} href={href}>{label}</a>)}
+          </nav>
+        </div>
+      </header>
+
+      <main id="main" className={styles.container} tabIndex={-1}>
+        <section className={styles.hero} aria-labelledby="name">
+          <div className={styles.intro}>
+            <p className={styles.focus}>Software Engineering &amp; Applied AI</p>
+            <h1 id="name">{profile.name}</h1>
+            <p className={styles.summary}>
+              I’m a computer science student building real-time voice applications and software for clinic workflows.
+            </p>
+            <div className={styles.actions}>
+              <a className={styles.button} href="#projects">View projects <span aria-hidden="true">↓</span></a>
+              <a className={styles.textLink} href="#contact">Get in touch <span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+
+          <aside id="education" className={styles.education} aria-labelledby="education-title">
+            <h2 id="education-title">Education</h2>
+            <p className={styles.university}>{profile.university}</p>
+            <p className={styles.degree}>{profile.program}</p>
+            <dl>
+              <div><dt>Expected graduation</dt><dd>{profile.graduation}</dd></div>
+              <div><dt>Based in</dt><dd>{profile.location}</dd></div>
+            </dl>
+          </aside>
+        </section>
+
+        <section id="projects" className={styles.section} aria-labelledby="projects-title">
+          <h2 id="projects-title">Selected Projects</h2>
+          <div className={styles.projectGrid}>
+            {projects.map((project) => (
+              <article key={project.title} className={styles.project}>
+                <div className={styles.projectHeading}>
+                  <h3>{project.title}</h3>
+                  <p className={styles.date}>{project.dates}</p>
+                </div>
+                <p className={styles.projectLead}>{project.description}</p>
+                <ul className={styles.details}>
+                  {project.details.map((detail) => <li key={detail}>{detail}</li>)}
+                </ul>
+                <ul className={styles.stack} aria-label={`${project.title} technologies`}>
+                  {project.stack.map((item) => <li key={item}>{item}</li>)}
+                </ul>
+                {"source" in project && (
+                  <a className={styles.textLink} href={project.source}>View source on GitHub <span aria-hidden="true">↗</span></a>
+                )}
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section id="experience" className={styles.section} aria-labelledby="experience-title">
+          <h2 id="experience-title">Experience</h2>
+          <div className={styles.experience}>
+            {experience.map((entry) => (
+              <article key={entry.role} className={styles.experienceRow}>
+                <p className={styles.date}>{entry.dates}</p>
+                <div>
+                  <h3>{entry.role}</h3>
+                  <p className={styles.organization}>{entry.organization} <span>· {entry.location}</span></p>
+                  <p className={styles.roleDetail}>{entry.description}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section id="skills" className={styles.section} aria-labelledby="skills-title">
+          <h2 id="skills-title">Technical Skills</h2>
+          <dl className={styles.skillGrid}>
+            {technicalSkills.map((group) => (
+              <div key={group.name}>
+                <dt>{group.name}</dt>
+                <dd>{group.items.join(", ")}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+
+        <section id="contact" className={`${styles.section} ${styles.contact}`} aria-labelledby="contact-title">
+          <div>
+            <h2 id="contact-title">Contact</h2>
+            <p>Open to software engineering and applied AI internships.</p>
+          </div>
+          <div className={styles.contactLinks}>
+            <a className={styles.button} href={`mailto:${profile.email}`}>Email me <span aria-hidden="true">↗</span></a>
+            <a className={styles.textLink} href={profile.linkedin}>LinkedIn <span aria-hidden="true">↗</span></a>
+            <a className={styles.textLink} href={profile.github}>GitHub <span aria-hidden="true">↗</span></a>
+          </div>
+        </section>
+      </main>
+
+      <footer className={styles.footer}>
+        <div className={`${styles.container} ${styles.footerInner}`}>
+          <p>{profile.name}</p>
+          <section className={styles.staff} aria-labelledby="frontdesk-access-title">
+            <h2 id="frontdesk-access-title">Clinic staff access</h2>
+            <a href="https://frontdesk.yuhanchen.me/staff/login" rel="noreferrer">Staff login / 前台平台登录</a>
+            <p>Authorized staff sign-in required.</p>
+          </section>
+        </div>
+      </footer>
+    </>
+  );
 }
