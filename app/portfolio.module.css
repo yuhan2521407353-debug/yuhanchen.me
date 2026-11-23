@@ -191,6 +191,22 @@
   background: var(--tint);
 }
 
+.educationIdentity {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: clamp(12px, 2vw, 20px);
+}
+
+.portrait {
+  display: block;
+  width: clamp(76px, 9vw, 112px);
+  height: auto;
+  aspect-ratio: 1;
+  border-radius: 9px;
+  object-fit: cover;
+}
+
 .education .university {
   margin-top: 12px;
   font-size: clamp(1.21rem, 2.65vw, 1.58rem);
