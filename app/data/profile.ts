@@ -6,7 +6,7 @@ export const profile = {
   university: "Stony Brook University",
   program: "B.S. in Computer Science",
   location: "Staten Island, NY",
-  educationDates: "August 2024 – Present",
+  educationDates: "Aug 2024 – May 2028 (Expected)",
   graduation: "May 2028",
 } as const;
 

@@ -1,5 +1,3 @@
-import Image from "next/image";
-import headshot from "../public/yuhan-chen.jpg";
 import { experience, projects, technicalSkills } from "./data/portfolio";
 import { profile } from "./data/profile";
 import styles from "./portfolio.module.css";
@@ -39,22 +37,11 @@ export default function Home() {
           </div>
 
           <aside id="education" className={styles.education} aria-labelledby="education-title">
-            <div className={styles.educationIdentity}>
-              <Image
-                className={styles.portrait}
-                src={headshot}
-                alt="Portrait of Yuhan Chen"
-                sizes="(max-width: 844px) 76px, (max-width: 1244px) 9vw, 112px"
-                loading="eager"
-              />
-              <div>
-                <h2 id="education-title">Education</h2>
-                <p className={styles.university}>{profile.university}</p>
-                <p className={styles.degree}>{profile.program}</p>
-              </div>
-            </div>
+            <h2 id="education-title">Education</h2>
+            <p className={styles.university}>{profile.university}</p>
+            <p className={styles.degree}>{profile.program}</p>
             <dl>
-              <div><dt>Expected graduation</dt><dd>{profile.graduation}</dd></div>
+              <div><dt>Dates</dt><dd>{profile.educationDates}</dd></div>
               <div><dt>Based in</dt><dd>{profile.location}</dd></div>
             </dl>
           </aside>
