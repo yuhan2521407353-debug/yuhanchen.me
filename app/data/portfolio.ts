@@ -1,17 +1,6 @@
 
 export const projects = [
   {
-    title: "Workflow Automation",
-    dates: "Jul 2026 – Present",
-    description: "A program designed to simplify routine office work and reduce manual steps.",
-    details: [
-      "Identified recurring tasks that could be simplified or automated.",
-      "Used AI to support structured workflows, with staff review for exceptions.",
-      "Tested common and unusual scenarios to check reliability and consistency.",
-    ],
-    stack: ["Python", "FastAPI", "PostgreSQL"],
-  },
-  {
     title: "Personal Portfolio",
     dates: "Sep 2026",
     description: "A responsive website for my projects, experience, and technical background.",
@@ -30,7 +19,12 @@ export const experience = [
     organization: "Wang’s Medical PC",
     location: "Brooklyn, NY",
     dates: "2025 – Present",
-    description: "Support daily medical office operations across patient services, scheduling, records, and staff coordination. Use that experience to identify where software can simplify routine work.",
+    description: "Map routine steps in scheduling, records, and staff coordination to identify automation opportunities.",
+    details: [
+      "Built a Python workflow automation program with FastAPI and PostgreSQL to reduce manual steps.",
+      "Designed AI-assisted workflows with validation checks and staff review for exceptions.",
+      "Tested routine and exception scenarios with synthetic inputs to check reliability.",
+    ],
   },
   {
     role: "Program Intern",

@@ -5,8 +5,8 @@ import { profile } from "./data/profile";
 import styles from "./portfolio.module.css";
 
 const sections = [
-  ["Projects", "#projects"],
   ["Experience", "#experience"],
+  ["Projects", "#projects"],
   ["Skills", "#skills"],
   ["Contact", "#contact"],
 ] as const;
@@ -33,7 +33,7 @@ export default function Home() {
               I’m a computer science student with hands-on experience in medical office operations. I build software to simplify routine work.
             </p>
             <div className={styles.actions}>
-              <a className={styles.button} href="#projects">View projects <span aria-hidden="true">↓</span></a>
+              <a className={styles.button} href="#experience">View experience <span aria-hidden="true">↓</span></a>
               <a className={styles.textLink} href="#contact">Get in touch <span aria-hidden="true">↗</span></a>
             </div>
           </div>
@@ -60,6 +60,27 @@ export default function Home() {
           </aside>
         </section>
 
+        <section id="experience" className={styles.section} aria-labelledby="experience-title">
+          <h2 id="experience-title">Experience</h2>
+          <div className={styles.experience}>
+            {experience.map((entry) => (
+              <article key={entry.role} className={styles.experienceRow}>
+                <p className={styles.date}>{entry.dates}</p>
+                <div>
+                  <h3>{entry.role}</h3>
+                  <p className={styles.organization}>{entry.organization} <span>· {entry.location}</span></p>
+                  <p className={styles.roleDetail}>{entry.description}</p>
+                  {"details" in entry ? (
+                    <ul className={styles.details}>
+                      {entry.details.map((detail) => <li key={detail}>{detail}</li>)}
+                    </ul>
+                  ) : null}
+                </div>
+              </article>
+            ))}
+          </div>
+        </section>
+
         <section id="projects" className={styles.section} aria-labelledby="projects-title">
           <h2 id="projects-title">Selected Projects</h2>
           <div className={styles.projectGrid}>
@@ -76,25 +97,7 @@ export default function Home() {
                 <ul className={styles.stack} aria-label={`${project.title} technologies`}>
                   {project.stack.map((item) => <li key={item}>{item}</li>)}
                 </ul>
-                {"source" in project && (
-                  <a className={styles.textLink} href={project.source}>View source on GitHub <span aria-hidden="true">↗</span></a>
-                )}
-              </article>
-            ))}
-          </div>
-        </section>
-
-        <section id="experience" className={styles.section} aria-labelledby="experience-title">
-          <h2 id="experience-title">Experience</h2>
-          <div className={styles.experience}>
-            {experience.map((entry) => (
-              <article key={entry.role} className={styles.experienceRow}>
-                <p className={styles.date}>{entry.dates}</p>
-                <div>
-                  <h3>{entry.role}</h3>
-                  <p className={styles.organization}>{entry.organization} <span>· {entry.location}</span></p>
-                  <p className={styles.roleDetail}>{entry.description}</p>
-                </div>
+                <a className={styles.textLink} href={project.source}>View source on GitHub <span aria-hidden="true">↗</span></a>
               </article>
             ))}
           </div>

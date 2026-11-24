@@ -271,6 +271,10 @@
   background: var(--card);
 }
 
+.project:only-child {
+  grid-column: 1 / -1;
+}
+
 .projectHeading {
   display: flex;
   flex-wrap: wrap;
@@ -354,6 +358,11 @@
   max-width: 750px;
   margin-top: 7px;
   color: var(--muted);
+}
+
+.experienceRow .details {
+  max-width: 750px;
+  margin: 9px 0 0;
 }
 
 .skillGrid {
