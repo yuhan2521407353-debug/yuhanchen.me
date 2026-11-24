@@ -19,11 +19,12 @@ export const experience = [
     organization: "Wang’s Medical PC",
     location: "Brooklyn, NY",
     dates: "2025 – Present",
-    description: "Map routine steps in scheduling, records, and staff coordination to identify automation opportunities.",
+    description: "Mapped scheduling, records management, and staff handoffs to identify steps suitable for automation.",
     details: [
-      "Built a Python workflow automation program with FastAPI and PostgreSQL to reduce manual steps.",
-      "Designed AI-assisted workflows with validation checks and staff review for exceptions.",
-      "Tested routine and exception scenarios with synthetic inputs to check reliability.",
+      "Developed a Python application with FastAPI and PostgreSQL to streamline routine office requests.",
+      "Added validation checks to AI-assisted workflows and routed unresolved requests to staff.",
+      "Synced workflow activity to a staff dashboard using an asynchronous queue with idempotent retries.",
+      "Reproduced issues with synthetic inputs and verified one release with 3,996 passing regression checks.",
     ],
   },
   {
