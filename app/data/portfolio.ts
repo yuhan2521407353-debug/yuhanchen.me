@@ -15,13 +15,13 @@ export const projects = [
 
 export const experience = [
   {
-    role: "Medical Office Staff",
+    role: "Medical Office Staff (Workflow Automation Developer)",
     organization: "Wang’s Medical PC",
     location: "Brooklyn, NY",
     dates: "2025 – Present",
-    description: "Mapped scheduling, records management, and staff handoffs to identify steps suitable for automation.",
+    description: "Developed a Python application with FastAPI and PostgreSQL to streamline routine office requests.",
     details: [
-      "Developed a Python application with FastAPI and PostgreSQL to streamline routine office requests.",
+      "Mapped scheduling, records management, and staff handoffs to identify steps suitable for automation.",
       "Added validation checks to AI-assisted workflows and routed unresolved requests to staff.",
       "Synced workflow activity to a staff dashboard using an asynchronous queue with idempotent retries.",
       "Reproduced issues with synthetic inputs and verified one release with 3,996 passing regression checks.",
