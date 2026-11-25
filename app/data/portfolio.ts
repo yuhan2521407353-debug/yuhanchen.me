@@ -19,12 +19,12 @@ export const experience = [
     organization: "Wang’s Medical PC",
     location: "Brooklyn, NY",
     dates: "2025 – Present",
-    description: "Developed a Python application with FastAPI and PostgreSQL to streamline routine office requests.",
+    description: "Developed a Python application with FastAPI and PostgreSQL to automate recurring medical office workflows.",
     details: [
-      "Mapped scheduling, records management, and staff handoffs to identify steps suitable for automation.",
-      "Added validation checks to AI-assisted workflows and routed unresolved requests to staff.",
-      "Synced workflow activity to a staff dashboard using an asynchronous queue with idempotent retries.",
-      "Reproduced issues with synthetic inputs and verified one release with 3,996 passing regression checks.",
+      "Designed workflow rules around scheduling, records management, and staff handoffs.",
+      "Integrated AI into request handling, with input validation and staff handoff for unresolved cases.",
+      "Built an asynchronous queue with idempotent retries to sync workflow events to a staff dashboard.",
+      "Reproduced workflow failures with synthetic inputs. One release passed 3,996 regression checks.",
     ],
   },
   {
@@ -32,14 +32,17 @@ export const experience = [
     organization: "NYCCP Operation: ADULTing™",
     location: "New York, NY",
     dates: "Summer 2024",
-    description: "Completed workshops in financial literacy, résumé writing, and workplace communication. Practiced job applications and interviews with peers and delivered a personal development presentation.",
+    description: "Prepared and delivered a project presentation, organizing key information for the program audience.",
   },
   {
     role: "Robotics Team Member",
     organization: "FIRST Tech Challenge",
     location: "Tottenville High School",
     dates: "2023 – 2024",
-    description: "Programmed autonomous and driver-controlled routines and tested them with hardware teammates. Earned the Outstanding Robotics Team Member Award.",
+    description: "Programmed autonomous routines and driver controls in JavaScript for competition.",
+    details: [
+      "Tested and debugged robot controls with teammates. Earned the Outstanding Robotics Team Member Award.",
+    ],
   },
 ] as const;
 
