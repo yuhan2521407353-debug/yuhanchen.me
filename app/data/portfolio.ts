@@ -32,7 +32,7 @@ export const experience = [
     organization: "NYCCP Operation: ADULTing™",
     location: "New York, NY",
     dates: "Summer 2024",
-    description: "Prepared and presented a personal development project, summarizing its goals and key takeaways.",
+    description: "Defined objectives, organized supporting materials, and presented a personal development project. I later applied the same approach in computer science projects, including defining what a workflow automation tool needed to do for clinic staff.",
     details: [
       "Completed workshops in financial literacy and workplace communication.",
     ],
