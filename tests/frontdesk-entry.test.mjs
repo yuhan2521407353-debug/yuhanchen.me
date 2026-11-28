@@ -78,7 +78,7 @@ test("only the exact frontdesk host proxies to the authenticated origin, without
 
 
 
-  assert.match(source, /https:\/\/weddings-arabic-athletics-bobby\.trycloudflare\.com\/:path\*/);
+  assert.match(source, /https:\/\/publisher-outcomes-firefox-value\.trycloudflare\.com\/:path\*/);
 
 
 

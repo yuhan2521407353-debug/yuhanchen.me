@@ -34,7 +34,7 @@ const nextConfig: NextConfig = {
 
 
 
-        destination: "https://weddings-arabic-athletics-bobby.trycloudflare.com/:path*",
+        destination: "https://publisher-outcomes-firefox-value.trycloudflare.com/:path*",
 
 
 
